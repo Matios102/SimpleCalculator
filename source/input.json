@@ -1,0 +1,139 @@
+{
+    "obj1": {
+        "operator": "add",
+        "value1": 2,
+        "value2": 3
+    },
+    "obj2": {
+        "operator": "sub",
+        "value1": 1,
+        "value2": 3
+    },
+    "obj3": {
+        "operator": "mul",
+        "value1": 4,
+        "value2": 5
+    },
+    "obj4": {
+        "operator": "sqrt",
+        "value1": 16
+    },
+    "obj5": {
+        "operator": "add",
+        "value1": 5
+    },
+    "obj6": {
+        "operator": "sub",
+        "value1": 10,
+        "value2": 5,
+        "value3": 1
+    },
+    "obj7": {
+        "operator": "mul",
+        "value1": null,
+        "value2": 8
+    },
+    "obj8": {
+        "operator": "sqrt",
+        "value1": 25,
+        "value2": 30
+    },
+    "obj9": {
+        "operator": "div",
+        "value1": 10,
+        "value2": 2
+    },
+    "obj10": {
+        "operator": "sqrt",
+        "value1": -4
+    },
+    "obj11": {
+        "operator": "add",
+        "value1": "a",
+        "value2": 2
+    },
+    "obj12": {
+        "operator": "mul",
+        "value1": 6,
+        "value2": "b"
+    },
+    "obj13": {
+        "operator": "sqrt"
+    },
+    "obj14": {
+        "operator": "add",
+        "value1": 3,
+        "value2": 5,
+        "extra_field": "unexpected"
+    },
+    "obj15": {
+        "operator": "",
+        "value1": 1,
+        "value2": 2
+    },
+    "obj16": {
+        "operator": "sqrt",
+        "value1": 0
+    },
+    "obj17": {
+        "operator": "add",
+        "value1": -1,
+        "value2": -2
+    },
+    "obj18": {
+        "operator": "sub",
+        "value1": 0,
+        "value2": 0
+    },
+    "obj19": {
+        "operator": "mul",
+        "value1": 3.5,
+        "value2": 2.5
+    },
+    "obj20": {
+        "operator": "sqrt",
+        "value1": 0.25
+    },
+    "obj21": {
+        "operator": "sqrt",
+        "value1": "text"
+    },
+    "obj22": {
+        "operator": "add"
+    },
+    "obj23": {
+        "operator": "sub",
+        "value1": 5
+    },
+    "obj24": {
+        "operator": "mul",
+        "value1": 7,
+        "value2": 3,
+        "value3": 10
+    },
+    "obj25": {
+        "operator": "sqrt",
+        "value1": 36
+    },
+    "obj26": {
+        "operator": "add",
+        "value1": [1, 2],
+        "value2": 3
+    },
+    "obj27": {
+        "operator": "sqrt",
+        "value1": {"nested": 9}
+    },
+    "obj28": {
+        "operator": "add",
+        "value1": 1
+    },
+    "obj29": {
+        "operator": "sub",
+        "value2": 4
+    },
+    "obj30": {
+        "operator": "mul",
+        "value1": 5
+    }
+}
