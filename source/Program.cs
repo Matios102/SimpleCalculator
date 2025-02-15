@@ -8,10 +8,11 @@ namespace SimpleCalculator
         {
             string inputFile = "./source/input.json";
             string outputFile = "./source/output.txt";
+            string errorFile = "./source/error.txt";
 
             FileService fileService = new FileService(outputFile);
 
-            CalculatorService calculatorService = new CalculatorService(inputFile, fileService);
+            CalculatorService calculatorService = new CalculatorService(inputFile, errorFile, fileService);
             calculatorService.Calculate();
         }
     }

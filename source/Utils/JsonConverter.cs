@@ -7,7 +7,12 @@ namespace SimpleCalculator.source.utils
 {
     public class OperationModelConverter : JsonConverter<List<OperationModel>>
     {
-        LoggerSerivce loggerSerivce = new LoggerSerivce("./source/error_log.txt");
+        LoggerSerivce loggerSerivce;
+
+        public OperationModelConverter(string errorFile)
+        {
+            loggerSerivce = new LoggerSerivce(errorFile);
+        }
         public override List<OperationModel> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var operations = new List<OperationModel>();

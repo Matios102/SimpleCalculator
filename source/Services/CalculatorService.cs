@@ -9,14 +9,16 @@ namespace SimpleCalculator.source.Services
     public class CalculatorService
     {
         private string inputFile;
+        private string errorFile;
         private FileService fileService;
         private bool errorLogged = false;
-
-        private LoggerSerivce loggerSerivce = new LoggerSerivce("./source/error_log.txt");
-        public CalculatorService(string inputFile, FileService fileService)
+        private LoggerSerivce loggerSerivce;
+        public CalculatorService(string inputFile, string errorFile, FileService fileService)
         {
             this.inputFile = inputFile;
             this.fileService = fileService;
+            this.errorFile = errorFile;
+            loggerSerivce = new LoggerSerivce(errorFile);
         }
 
         public void Calculate()
@@ -47,7 +49,7 @@ namespace SimpleCalculator.source.Services
                         loggerSerivce.LogError($"Error processing operation '{operation.ObjectName}': {ex.Message}");
                         if (!errorLogged)
                         {
-                            Console.WriteLine("Errors have been logged to ./source/error_log.txt");
+                            Console.WriteLine($"Errors have been logged to {errorFile}");
                             errorLogged = true;
                         }
                     }
@@ -62,7 +64,7 @@ namespace SimpleCalculator.source.Services
                 loggerSerivce.LogError($"An error occurred: {ex.Message}");
                 if (!errorLogged)
                 {
-                    Console.WriteLine("Errors have been logged to ./source/error_log.txt");
+                    Console.WriteLine($"Errors have been logged to {errorFile}");
                     errorLogged = true;
                 }
             }
@@ -72,7 +74,7 @@ namespace SimpleCalculator.source.Services
         {
             string json = File.ReadAllText(inputFile);
             var options = new JsonSerializerOptions();
-            options.Converters.Add(new OperationModelConverter());
+            options.Converters.Add(new OperationModelConverter(errorFile));
 
             List<OperationModel>? operationList = JsonSerializer.Deserialize<List<OperationModel>>(json, options);
 
