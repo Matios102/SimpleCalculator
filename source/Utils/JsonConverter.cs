@@ -5,6 +5,7 @@ using SimpleCalculator.source.Services;
 
 namespace SimpleCalculator.source.utils
 {
+    // Converts JSON data to a list of OperationModel objects
     public class OperationModelConverter : JsonConverter<List<OperationModel>>
     {
         LoggerSerivce loggerSerivce;
