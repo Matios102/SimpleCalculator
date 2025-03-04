@@ -10,9 +10,10 @@ namespace SimpleCalculator
             string outputFile = "./source/output.txt";
             string errorFile = "./source/error.txt";
 
+            LoggerService loggerService = new LoggerService(errorFile);
             FileService fileService = new FileService(outputFile);
 
-            CalculatorService calculatorService = new CalculatorService(inputFile, errorFile, fileService);
+            CalculatorService calculatorService = new CalculatorService(inputFile, fileService, loggerService);
             calculatorService.Calculate();
         }
     }

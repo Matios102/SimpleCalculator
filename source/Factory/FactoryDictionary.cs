@@ -7,7 +7,7 @@ namespace SimpleCalculator.source.Factory
         public static readonly Dictionary<string, IFactory> FactoryDictionary = new Dictionary<string, IFactory>
         {
             {"add", new AdditionFactory()},
-            {"sbu", new SubtractionFactory()},
+            {"sub", new SubtractionFactory()},
             {"mul", new MultiplicationFactory()},
             {"sqrt", new SquareRootFactory()}
         };
