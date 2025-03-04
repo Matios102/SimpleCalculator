@@ -29,8 +29,6 @@ namespace SimpleCalculator.source.Services
 
                 var data = new List<Tuple<string, double>>();
 
-                OperationFactory factory = new OperationFactory();
-
                 if (operationList == null)
                 {
                     Console.WriteLine("No operations to process.");
@@ -41,8 +39,21 @@ namespace SimpleCalculator.source.Services
                 {
                     try
                     {
-                        IOperation operationHandler = factory.CreateOperation(operation.Values, operation.Operator);
-                        data.Add(Tuple.Create(operation.ObjectName, operationHandler.Execute()));
+                        FactoryDictionaryProvider.FactoryDictionary.TryGetValue(operation.Operator, out IFactory? factory);
+                        if (factory != null)
+                        {
+                            IOperation operationHandler = factory.CreateOperation(operation.Values);
+                            data.Add(Tuple.Create(operation.ObjectName, operationHandler.Execute()));
+                        }
+                        else
+                        {
+                            loggerSerivce.LogError($"Factory not found for operator '{operation.Operator}'");
+                            if (!errorLogged)
+                            {
+                                Console.WriteLine($"Errors have been logged to {errorFile}");
+                                errorLogged = true;
+                            }
+                        }
                     }
                     catch (Exception ex)
                     {
