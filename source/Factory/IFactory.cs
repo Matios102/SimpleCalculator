@@ -4,6 +4,6 @@ namespace SimpleCalculator.source.Factory
 {
     public interface IFactory
     {
-        IOperation  CreateOperation(List<double> values);
+        IOperation  Create(List<double> values);
     }
 }

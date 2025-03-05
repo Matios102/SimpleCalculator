@@ -19,12 +19,7 @@ namespace SimpleCalculator.source.Services
             }
             using (StreamWriter writer = new StreamWriter(logFile, append: true))
             {
-                writer.WriteLine("========================================");
-                writer.WriteLine($"Timestamp: {DateTime.Now}");
-                writer.WriteLine("Severity: ERROR");
-                writer.WriteLine($"Message: {message}");
-                writer.WriteLine("========================================");
-                writer.WriteLine();
+                writer.WriteLine($"[{DateTime.Now}] ERROR: {message}");
             }
         }
     }

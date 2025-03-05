@@ -4,7 +4,7 @@ namespace SimpleCalculator.source.Factory
 {
     public class AdditionFactory : IFactory
     {
-        public IOperation CreateOperation(List<double> values)
+        public IOperation Create(List<double> values)
         {
             if (values.Count != 2)
             {
