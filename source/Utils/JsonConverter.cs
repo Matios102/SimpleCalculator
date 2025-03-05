@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 using SimpleCalculator.source.Models;
 using SimpleCalculator.source.Services;
 
-namespace SimpleCalculator.source.utils
+namespace SimpleCalculator.source.Utils
 {
     // Converts JSON data to a list of OperationModel objects
     public class OperationModelConverter : JsonConverter<List<OperationModel>>

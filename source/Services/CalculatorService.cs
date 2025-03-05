@@ -2,7 +2,7 @@ using System.Text.Json;
 using SimpleCalculator.source.Factory;
 using SimpleCalculator.source.Models;
 using SimpleCalculator.source.Operation;
-using SimpleCalculator.source.utils;
+using SimpleCalculator.source.Utils;
 
 namespace SimpleCalculator.source.Services
 {
@@ -26,7 +26,7 @@ namespace SimpleCalculator.source.Services
 
                 var data = new List<Tuple<string, double>>();
 
-                if (operationList == null)
+                if (operationList == null || operationList.Count == 0)
                 {
                     Console.WriteLine("No operations to process.");
                     return;
@@ -39,7 +39,7 @@ namespace SimpleCalculator.source.Services
                         FactoryDictionaryProvider.FactoryDictionary.TryGetValue(operation.Operator, out IFactory? factory);
                         if (factory != null)
                         {
-                            IOperation operationHandler = factory.CreateOperation(operation.Values);
+                            IOperation operationHandler = factory.Create(operation.Values);
                             data.Add(Tuple.Create(operation.ObjectName, operationHandler.Execute()));
                         }
                         else
