@@ -2,9 +2,9 @@ namespace SimpleCalculator.source.Services
 {
     public class FileService
     {
-        string outputFile;
+        private string outputFile;
 
-        public FileService(string outputFile) 
+        public FileService(string outputFile)
         {
             this.outputFile = outputFile;
         }

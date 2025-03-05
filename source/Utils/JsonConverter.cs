@@ -8,11 +8,11 @@ namespace SimpleCalculator.source.utils
     // Converts JSON data to a list of OperationModel objects
     public class OperationModelConverter : JsonConverter<List<OperationModel>>
     {
-        LoggerSerivce loggerSerivce;
+        private LoggerService loggerService;
 
-        public OperationModelConverter(string errorFile)
+        public OperationModelConverter(LoggerService loggerService)
         {
-            loggerSerivce = new LoggerSerivce(errorFile);
+            this.loggerService = loggerService;
         }
         public override List<OperationModel> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
@@ -29,7 +29,7 @@ namespace SimpleCalculator.source.utils
                     }
                     catch (Exception ex)
                     {
-                        loggerSerivce.LogError($"Error processing object '{element.Name}': {ex.Message}");
+                        loggerService.LogError($"Error processing object '{element.Name}': {ex.Message}");
                     }
                 }
             }
@@ -46,29 +46,35 @@ namespace SimpleCalculator.source.utils
                 Values = new List<double>()
             };
 
-            if (element.Value.TryGetProperty("value1", out JsonElement value1))
+            HashSet<string> validFields = new HashSet<string> { "operator", "value1", "value2" };
+            
+            foreach (var property in element.Value.EnumerateObject())
             {
-                operation.Values.Add(ParseDouble(value1, "value1", element.Name));
+                if (!validFields.Contains(property.Name))
+                {
+                    throw new ArgumentException($"Unexpected field '{property.Name}'. Allowed fields: 'operator', 'value1', and optionally 'value2'.");
+                }
             }
+
+            if (!element.Value.TryGetProperty("value1", out JsonElement value1))
+            {
+                throw new ArgumentException("Missing filed 'value1'.");
+            }
+            operation.Values.Add(ParseDouble(value1, "value1"));
 
             if (element.Value.TryGetProperty("value2", out JsonElement value2))
             {
-                operation.Values.Add(ParseDouble(value2, "value2", element.Name));
-            }
-
-            if (operation.Values.Count < 1 || operation.Values.Count > 2)
-            {
-                throw new ArgumentException($"Object must have 1 or 2 values.");
+                operation.Values.Add(ParseDouble(value2, "value2"));
             }
 
             return operation;
         }
 
-        private double ParseDouble(JsonElement valueElement, string valueName, string objectName)
+        private double ParseDouble(JsonElement valueElement, string valueName)
         {
             if (!valueElement.TryGetDouble(out double result))
             {
-                throw new ArgumentException($"{valueName} in object '{objectName}' is not a valid number.");
+                throw new ArgumentException($"{valueName} is not a valid number.");
             }
 
             return result;

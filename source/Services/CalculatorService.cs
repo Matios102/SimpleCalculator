@@ -9,16 +9,13 @@ namespace SimpleCalculator.source.Services
     public class CalculatorService
     {
         private string inputFile;
-        private string errorFile;
         private FileService fileService;
-        private bool errorLogged = false;
-        private LoggerSerivce loggerSerivce;
-        public CalculatorService(string inputFile, string errorFile, FileService fileService)
+        private LoggerService loggerService;
+        public CalculatorService(string inputFile, FileService fileService, LoggerService loggerService)
         {
             this.inputFile = inputFile;
             this.fileService = fileService;
-            this.errorFile = errorFile;
-            loggerSerivce = new LoggerSerivce(errorFile);
+            this.loggerService = loggerService;
         }
 
         public void Calculate()
@@ -28,8 +25,6 @@ namespace SimpleCalculator.source.Services
                 List<OperationModel>? operationList = DeserializeJson();
 
                 var data = new List<Tuple<string, double>>();
-
-                OperationFactory factory = new OperationFactory();
 
                 if (operationList == null)
                 {
@@ -41,17 +36,20 @@ namespace SimpleCalculator.source.Services
                 {
                     try
                     {
-                        IOperation operationHandler = factory.CreateOperation(operation.Values, operation.Operator);
-                        data.Add(Tuple.Create(operation.ObjectName, operationHandler.Execute()));
+                        FactoryDictionaryProvider.FactoryDictionary.TryGetValue(operation.Operator, out IFactory? factory);
+                        if (factory != null)
+                        {
+                            IOperation operationHandler = factory.CreateOperation(operation.Values);
+                            data.Add(Tuple.Create(operation.ObjectName, operationHandler.Execute()));
+                        }
+                        else
+                        {
+                            loggerService.LogError($"Error processing object '{operation.ObjectName}': Invalid operator '{operation.Operator}'.");
+                        }
                     }
                     catch (Exception ex)
                     {
-                        loggerSerivce.LogError($"Error processing operation '{operation.ObjectName}': {ex.Message}");
-                        if (!errorLogged)
-                        {
-                            Console.WriteLine($"Errors have been logged to {errorFile}");
-                            errorLogged = true;
-                        }
+                        loggerService.LogError($"Error processing object '{operation.ObjectName}': {ex.Message}");
                     }
                 }
 
@@ -61,24 +59,27 @@ namespace SimpleCalculator.source.Services
             }
             catch (Exception ex)
             {
-                loggerSerivce.LogError($"An error occurred: {ex.Message}");
-                if (!errorLogged)
-                {
-                    Console.WriteLine($"Errors have been logged to {errorFile}");
-                    errorLogged = true;
-                }
+                loggerService.LogError($"An error occurred: {ex.Message}");
             }
         }
 
         private List<OperationModel>? DeserializeJson()
         {
-            string json = File.ReadAllText(inputFile);
-            var options = new JsonSerializerOptions();
-            options.Converters.Add(new OperationModelConverter(errorFile));
+            try
+            {
+                string json = File.ReadAllText(inputFile);
+                var options = new JsonSerializerOptions();
+                options.Converters.Add(new OperationModelConverter(loggerService));
 
-            List<OperationModel>? operationList = JsonSerializer.Deserialize<List<OperationModel>>(json, options);
+                List<OperationModel>? operationList = JsonSerializer.Deserialize<List<OperationModel>>(json, options);
 
-            return operationList;
+                return operationList;
+            }
+            catch (Exception ex)
+            {
+                loggerService.LogError($"Error deserializing JSON: {ex.Message}");
+                return null;
+            }
         }
     }
 }
